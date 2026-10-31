@@ -37,6 +37,8 @@ flowchart LR
 
 写入器不会替轮廓点自动拟合曲线。只提供锚点会得到直线段，`smooth: true` 也不代替控制柄设计。默认要求是助手的执行与验收流程，不是新增的自动去噪算法；实际质量仍需通过参考图对照验证。
 
+箭头另需逐支检查：头部与箭身使用同一几何基准，直箭头沿中心线、曲线箭头沿末端切线对齐，箭身在头部内部收住，避免穿头、侧边凸出和连接白缝。构造与验收方法见 [箭头几何说明](references/arrow-geometry.md)。
+
 ## 技术栈
 
 | 层级 | 技术 | 作用 |
@@ -122,6 +124,7 @@ illustrator-native-rebuild/
 ├── agents/openai.yaml
 ├── references/
 │   ├── architecture.md
+│   ├── arrow-geometry.md
 │   └── native-scene.md
 └── scripts/
     ├── native-rebuild.cjs
