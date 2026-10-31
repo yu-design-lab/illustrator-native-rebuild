@@ -49,7 +49,7 @@ flowchart LR
 
 ### 获取与安装
 
-仓库地址：[3032512167-cyber/illustrator-native-rebuild](https://github.com/3032512167-cyber/illustrator-native-rebuild)。
+仓库地址：[yu-design-lab/illustrator-native-rebuild](https://github.com/yu-design-lab/illustrator-native-rebuild)。
 
 下载方式任选其一：
 
@@ -57,7 +57,7 @@ flowchart LR
 - 使用 Git 获取完整目录：
 
 ```powershell
-git clone https://github.com/3032512167-cyber/illustrator-native-rebuild.git
+git clone https://github.com/yu-design-lab/illustrator-native-rebuild.git
 ```
 
 将本目录作为一个完整 skill 安装到宿主助手的 skills 目录，保留 `SKILL.md`、`agents`、`references` 和 `scripts` 的相对结构。调用示例：
