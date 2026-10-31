@@ -24,9 +24,8 @@
     {"type": "group", "name": "leaf-01", "children": [
       {"type": "path", "name": "leaf-outline", "closed": true,
        "points": [
-         {"anchor": [100, 100], "right": [150, 40]},
-         {"anchor": [250, 100], "left": [200, 40], "right": [200, 160]},
-         {"anchor": [100, 100], "left": [150, 160]}
+         {"anchor": [100, 100], "left": [150, 160], "right": [150, 40]},
+         {"anchor": [250, 100], "left": [200, 40], "right": [200, 160]}
        ],
        "fill": {"gradient": "leaf-light", "origin": [100, 100], "length": 150, "angle": 0},
        "stroke": "#407E43", "strokeWidth": 1},
@@ -47,7 +46,7 @@
 共同字段：`type`、全局唯一 `name`。图形有 `fill`、`stroke`（默认均为 null）、`strokeWidth`（点按 scale 缩放）、`opacity`（0–100，默认100）。子项顺序由底到顶，运行时保持顺序。
 
 - `group`：`children` 数组；重复元素分别建立 group。嵌套编组保留。
-- `path`：`points` 至少2项；每项 `anchor` 必填，`left`/`right` 为绝对控制点，省略则等于 anchor；`smooth` 默认 false；`closed` 默认 false。闭合轮廓通常不重复首点，上面示例展示的是两段曲线接回原点，实际可用首点 left 和第二点 right 直接闭合。
+- `path`：`points` 至少2项；每项 `anchor` 必填，`left`/`right` 为绝对控制点，省略则等于 anchor；`smooth` 默认 false；`closed` 默认 false。闭合轮廓通常不重复首点；上面示例用两个锚点的四个控制柄构成两段曲线，最后一段通过第二点 right 和首点 left 闭合，尖端保留角点。
 - `compound`：`paths` 数组，每项是闭合 path，至少一个；共享填充描边。用反向环绕表达孔洞，`evenodd: true` 可显式选择奇偶填充。实际应用中必须检查孔洞。
 - `ellipse` / `rect`：`box: [x,y,width,height]`，宽高为正。
 - `text`：`text` 内容、`position` 为原文基线坐标；`font` 必须是 Illustrator 可用 PostScript 字体名称；`size` 正数；`align` 为 left/center/right；`rotation` 以 Illustrator 角度为准，默认0。支持换行，但基线/行距需实际对照修正。字号不自动缩放适配；字体缺失报错，不能静默替换或转曲。文字填充必须为纯色。
@@ -55,6 +54,14 @@
 纯色可写 `#RRGGBB` 或 `{"cmyk":[C,M,Y,K]}`（0–100）。黑色箭头的所有路径使用同一个值。
 
 渐变定义支持 `linear`/`radial`，至少两个且最多32个 stops；offset 0–100严格递增（需包括0和100），color为纯色，opacity 0–100默认100。图形 fill 使用 `{"gradient":"id","origin":[x,y],"length":正数,"angle":角度}`；length/原点沿用场景坐标，角度按 Illustrator 坐标。当前不实现 SVG 渐变矩阵、裁剪、滤镜、网格渐变或混合模式；这类要求需写本地专项 JSX，不能静默降级为色带/位图。
+
+## 曲线质量与写入器的分工
+
+从点 A 到点 B 的贝塞尔段由 `A.anchor`、`A.right`、`B.left`、`B.anchor` 定义。省略两个控制柄时，它们分别落在 A、B 的锚点上，这段就是直线；`smooth: true` 只设置点类型，不负责计算适合原图的控制柄。
+
+先根据原图轮廓、端点与切线设计控制柄，再交给写入器。不能把像素轮廓点直接塞进 `points` 并依赖写入器消除锯齿，也不能为了出现控制柄而任意添加短柄；需要实际检查形态和接缝。直线与真实折角无需强制曲线化。
+
+格式校验允许合法折线，因为箭头、矩形和其他几何对象需要直边。CLI 不具备参考图理解，不能判断某条合法折线是否错误替代了原图曲线；这项检查由助手在写入前、实际导出后分别执行。元素清单和局部对照记录应保存在任务笔记中，不添加到严格校验的场景字段里。
 
 ## 命令与状态
 
