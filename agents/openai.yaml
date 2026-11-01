@@ -1,4 +1,4 @@
 interface:
   display_name: "Illustrator 原生矢量重建与精修"
   short_description: "语义拆解、贝塞尔重构与局部放大精修，交付原生可编辑的 Illustrator 作品。"
-  default_prompt: "使用 $illustrator-native-rebuild 在 Illustrator 中保真复刻并精修这张图：先区分像素噪声与真实轮廓，按元素清单重建带实际控制柄的贝塞尔路径；文字用原生文字，每个元素单独编组，渐变用原生渐变；同一箭头各部分色值统一，头部中轴与箭身末端切线对齐，箭身收在头部内部，不穿头、不露边、无白缝；完成 200%–400% 局部放大对照、逐支箭头检查、漏画检查和去毛边修正，再交付 AI、预览与细节对照图。"
+  default_prompt: "使用 $illustrator-native-rebuild 复刻这张参考图，文字、路径、渐变和编组保持原生可编辑，全程不调用外部图像处理服务。"

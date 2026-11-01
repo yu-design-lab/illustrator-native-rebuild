@@ -31,14 +31,6 @@ flowchart LR
 
 视觉分析、场景设计和精修判断由宿主助手执行。附带脚本负责已知几何的校验和写入；不包含自动识图、自动曲线拟合或自动视觉验收算法。精修回写需按目标对象编写局部 JSX 操作，不能直接重复运行追加式写入命令。
 
-### 默认精修要求
-
-单独调用 skill 即包含去毛边和精修要求：先建立元素清单检查漏画，再区分像素噪声与真实轮廓，为曲线设计实际贝塞尔控制柄，完成原生文字、渐变和独立编组，最后逐项核对整体与 200%–400% 局部对照。发现缺失轮廓、碎片或接缝问题时需修正并重新导出。
-
-写入器不会替轮廓点自动拟合曲线。只提供锚点会得到直线段，`smooth: true` 也不代替控制柄设计。默认要求是助手的执行与验收流程，不是新增的自动去噪算法；实际质量仍需通过参考图对照验证。
-
-箭头另需逐支检查：头部与箭身使用同一几何基准，直箭头沿中心线、曲线箭头沿末端切线对齐，箭身在头部内部收住，避免穿头、侧边凸出和连接白缝。构造与验收方法见 [箭头几何说明](references/arrow-geometry.md)。
-
 ## 技术栈
 
 | 层级 | 技术 | 作用 |
@@ -70,7 +62,7 @@ git clone https://github.com/yu-design-lab/illustrator-native-rebuild.git
 
 将本目录作为一个完整 skill 安装到宿主助手的 skills 目录，保留 `SKILL.md`、`agents`、`references` 和 `scripts` 的相对结构。调用示例：
 
-> 使用 $illustrator-native-rebuild 保真重建这张参考图，保留原生文字、路径、渐变和语义编组；完成 200%–400% 局部放大对照和轮廓精修，交付 AI、PNG 与关键细节对照图。
+> 使用 $illustrator-native-rebuild 复刻这张参考图，文字、路径、渐变和编组保持原生可编辑，全程不调用外部图像处理服务。
 
 桌面写入需要 Windows、已运行的 Adobe Illustrator、已打开且处于活动状态的目标文档，以及场景引用的字体。画板尺寸和插入位置由任务明确指定，脚本不会调整画板或自动避让已有对象。
 
@@ -124,7 +116,6 @@ illustrator-native-rebuild/
 ├── agents/openai.yaml
 ├── references/
 │   ├── architecture.md
-│   ├── arrow-geometry.md
 │   └── native-scene.md
 └── scripts/
     ├── native-rebuild.cjs
